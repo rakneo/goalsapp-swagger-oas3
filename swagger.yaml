@@ -1,0 +1,179 @@
+---
+openapi: 3.0.0
+info:
+  title: Goals App API
+  description: This is the API Specification for GoalsApp API
+  contact:
+    name: Rakshith Vikramraj
+    email: raksithvikramraj@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/rakneo/GoalsApp/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: goal
+paths:
+  /goal/:
+    get:
+      tags:
+      - goal
+      summary: Get All Goals
+      description: Get all goals with pagination page and size parameter
+      parameters:
+      - name: page
+        in: query
+        description: page number for pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: size
+        in: query
+        description: number of records for pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalModel'
+        "500":
+          description: Internal Server Error
+          content: {}
+    post:
+      tags:
+      - goal
+      summary: Add a new Goal
+      operationId: addGoal
+      requestBody:
+        description: Pet object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GoalModel'
+        required: true
+      responses:
+        "405":
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
+  /goal/{id}:
+    get:
+      tags:
+      - goal
+      summary: Get goal object by goal ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Goal object created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalModel'
+        "404":
+          description: Goal object with given ID not found
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
+    put:
+      tags:
+      - goal
+      summary: Update a goal object by goal ID
+      operationId: updateGoal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Goal object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalModel'
+        required: true
+      responses:
+        "200":
+          description: goal object updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalModel'
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: Goal not found
+          content: {}
+        "405":
+          description: Validation exception
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - goal
+      summary: Delete goal object by Goal ID
+      operationId: deleteGoal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Goal object deleted
+          content: {}
+        "500":
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    GoalModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+        goalName:
+          type: string
+          format: string
+        description:
+          type: string
+          format: string
+        dueDateTime:
+          type: string
+          format: string
+        createdDateTime:
+          type: string
+          format: string
+        lastModifiedDateTime:
+          type: string
+          format: string
